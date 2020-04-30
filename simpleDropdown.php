@@ -3,8 +3,6 @@ $link=mysqli_connect("localhost","root","");
 mysqli_select_db($link,"bughound");
 
 ?>
-
-
 <html>
 <head>
 <title>fetching testing</title>

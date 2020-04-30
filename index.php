@@ -5,15 +5,15 @@
                     header("Location: welcome.php");
 
             }
-
+            $connection=mysqli_connect("localhost","root","","bughound");
 ?>
 
 
 <?php
 if(isset($_POST['submit'])){
-$username=$_POST['username'];
-$password=$_POST['password'];
-$connection=mysqli_connect("localhost","root","","bughound");
+$username=mysqli_real_escape_string($connection,$_POST['username']);
+$password=mysqli_real_escape_string($connection,$_POST['password']);
+
 if(mysqli_connect_errno()){
     echo "Database connection failed";
 }

@@ -6,10 +6,11 @@ if($conn->connect_error){
 $bug=$_GET['data'];
 $sql="DELETE FROM bug where `BugID`=$bug";
 if($conn->query($sql)===TRUE){
-    echo '<script>alert("Record deleted Successfully")</script>';
-}
+    echo '<script> alert("Successfully Deleted");
+    location.href="./DeleteSearchBug.php";</script>';
+} 
 else{
-    echo "Error Deleteing record: " . $conn->error;
+echo "Error Deleteing record: " . $conn->error;
 }
 $conn->close();
 

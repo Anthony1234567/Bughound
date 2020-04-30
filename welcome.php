@@ -21,8 +21,9 @@
             <h4>User level: <?php echo " ".$_COOKIE['userlevel']." "; ?></h4>
             <div><a href="bugentry.php">Enter New Bug</a></div>
             <div><a href="SearchBug.php">Update Existing Bug</a></div>
-            <div><a href="dbmaintainence.php">Database Maintenence</a></div>
             <div><a href="DeleteSearchBug.php">Delete Existing Bug</a></div>
+            <div><a href="dbmaintainence.php">Database Maintenence</a></div>
+            
             <h3>empid:<?php echo " ".$_COOKIE['empID'];?></h3>
         
         <?php }
@@ -31,7 +32,7 @@
             ?>
                 <h4>User level: <?php echo " ".$_COOKIE['userlevel']." "; ?></h4>
                 <div><a href="bugentry.php">Enter New Bug</a></div>
-                <div><a href="SearchBug.php">Update Existing Bug</a></div>
+               
         <?php 
             }
     }

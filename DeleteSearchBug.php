@@ -156,13 +156,16 @@ mysqli_select_db($link,"bughound");
                     <p align="center">
                         <input type="submit" value="  Submit" name="B4">
                         <input type="reset" value="  Reset All   " name="B5">
-                        <input type="button" name="cancel" value="cancel">
+                        
                     </td>
             </tr>
  
         </table>
     </form>
-    
+    <div align="center">
+    <button onclick="location.href='welcome.php'">Cancel</button>
+    <button onclick="location.href='logout.php'">Logout</button>
+    </div>
 </body>
  
 </html>
@@ -183,7 +186,7 @@ $(document).ready(function(){
          });
         }
         else{
-            $('#functionalAreas').html('<option value="">Select program first</otpion>');
+            $('#functionalAreas').html('<option value="">Select program first</option>');
         }
     });
     

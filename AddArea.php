@@ -8,12 +8,24 @@ mysqli_select_db($link,"bughound");
 <html>
 <head>
 <title>fetching testing</title>
+<script type="text/javascript">
+    function fun(){
+        var v=document.getElementById("programs").value;
+        if(v==""){
+            alert("No programs yet !");
+            return false;
+        }
+        else    
+            return true;       
+
+    }
+</script>
 </head>
 <body>
-<form name="form1" action="AddingArea.php" method="post">
+<form name="form1" action="AddingArea.php" onsubmit="return fun()"method="post">
 
 <label>Select Program for areas</label>
-<select name="programs">
+<select name="programs" id="programs">
 <option value="">Select</option>
 <?php 
     $result=mysqli_query($link,"select * from program");

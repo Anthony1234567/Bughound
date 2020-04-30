@@ -68,18 +68,18 @@ if(isset($_POST['B4'])){
  
             </tr>
             <tr>
-                <td align="left" valign="top" width="41%">Program Name</td>
+                <td align="left" valign="top" width="41%">Program Name<span style="color:red">*</span></td>
  
-                <td width="57%"><input type="text" value="" name="program_name" size="24"></td>
+                <td width="57%"><input type="text" value="" name="program_name" size="24" required></td>
             </tr >
             <tr>
-                <td align="left" valign="top" width="41%">Program Release</td>
+                <td align="left" valign="top" width="41%">Program Release<span style="color:red">*</span></td>
  
-                <td width="57%"><input type="text" value="" name="program_release" size="24"></td>
+                <td width="57%"><input type="text" value="" name="program_release" size="24" required></td>
             </tr >
             <tr>
                 <td align="left" valign="top" width="41%">Program version <span style="color:red">*</span></td>
-                <td width="57%"><input type="text" value="" name="program_version" size="24"></td>
+                <td width="57%"><input type="text" value="" name="program_version" size="24" required></td>
             </tr>
             <tr>
                 <td colspan="2">

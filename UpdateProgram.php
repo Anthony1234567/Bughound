@@ -37,6 +37,12 @@ if(isset($_POST['B4'])){
 <head>
  
     <title>Edit Programs </title>
+    <script type="text/javascript">
+        function validate_form(){
+            alert("changes done successfully!");
+            return true;
+        }
+    </script>
 
 </head>
 
@@ -72,18 +78,18 @@ if(isset($_GET["data"]))
  
             </tr>
             <tr>
-                <td align="left" valign="top" width="41%">Program Name</td>
+                <td align="left" valign="top" width="41%">Program Name<span style="color:red">*</span></td>
  
-                <td width="57%"><input type="text" value="<?php echo $p_name ?>" name="program_name" size="24"></td>
+                <td width="57%"><input type="text" value="<?php echo $p_name ?>" name="program_name" size="24" required></td>
             </tr >
             <tr>
-                <td align="left" valign="top" width="41%">Program Release</td>
+                <td align="left" valign="top" width="41%">Program Release<span style="color:red">*</span></td>
  
-                <td width="57%"><input type="text" value="<?php echo $p_release?>" name="program_release" size="24"></td>
+                <td width="57%"><input type="text" value="<?php echo $p_release?>" name="program_release" size="24" required></td>
             </tr >
             <tr>
                 <td align="left" valign="top" width="41%">Program version <span style="color:red">*</span></td>
-                <td width="57%"><input type="text" value="<?php echo $p_version?>" name="program_version" size="24"></td>
+                <td width="57%"><input type="text" value="<?php echo $p_version?>" name="program_version" size="24" required></td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -94,10 +100,12 @@ if(isset($_GET["data"]))
  
         </table>
 </form>
-
-<button onclick="location.href='dbmaintainence.php'">cancel</button>
-
-
+<div align="center">
+<button onclick="location.href='EditProgram.php'">Back</button>
+<button onclick="location.href='dbmaintainence.php'">Cancel</button>
+<button onclick="location.href='welcome.php'">Welcome page</button>
+<button name="logout" onclick='location.href="logout.php"'>Logout</button>
+</div>
 
 </body>
  

@@ -1,3 +1,15 @@
+
+<html>
+<head>
+<script type="text/javascript">
+    function myfunction(){
+        return confirm("Confirm deleting the bug record?");
+        
+    }
+</script>
+</head>
+</html>
+
 <?php
 
 if(isset($_POST['B4'])){
@@ -82,19 +94,39 @@ if(isset($_POST['B4'])){
         
          while($row=mysqli_fetch_row($results)) {
                  $none=1;
-                 $query1="SELECT program_name from program where prog_id=$row[1]";
-                 $query2="SELECT functional_area from area where area_id=$row[4]";
-                 $program_result=$conn->query($query1); 
+                 if($row[1]!=NULL){
+                    $test1=$row[1];
+                    $query1="SELECT program_name from program where prog_id=$test1";
+                    $program_result=$conn->query($query1); 
+                    if($program_result->num_rows > 0){
+                        $prow=mysqli_fetch_row($program_result);
+                        $string1=$prow[0];
+                    } 
+                    else{
+                        $string1="NULL";
+                    }
+             }
+             else{
+                 $string1="NULL";
+             }
+             if($row[4]!=NULL){
+                 $test2=$row[4];
+                 $query2="SELECT functional_area from area where area_id=$test2";
                  $area_result=$conn->query($query2);
-                 if($program_result->num_rows > 0){
-                     $prow=mysqli_fetch_row($program_result);
-                 } 
                  if($area_result->num_rows > 0 ){
-                     $arow=mysqli_fetch_row($area_result);
-                 }
+                    $arow=mysqli_fetch_row($area_result);
+                    $string2=$arow[0];
+                }
+                else{
+                    $string2="NULL";
+                }
+             }
+             else{
+                 $string2="NULL";
+             }
                  
                  printf("<tr>
-                 <td><a href='./deletedBug.php?data=%s' target='_blank'>%s</a></td>
+                 <td><a href='./deletedBug.php?data=%s' target='_blank' onclick='return myfunction();'>%s</a></td>
                  <td>%s</td>
                  <td>%s</td>
                  <td>%s</td>
@@ -116,7 +148,7 @@ if(isset($_POST['B4'])){
                  <td>%s</td>
                  <td>%s</td>
                  <td>%s</td>
-                 </tr>\n",$row[0],$row[0],$row[1],$prow[0],$row[2],$row[3],$row[4],$arow[0],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19]);
+                 </tr>\n",$row[0],$row[0],$row[1],$string1,$row[2],$row[3],$row[4],$string2,$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19]);
              }
              if($none==0)
              Echo "<h3>No matching records found.</h3>\n";

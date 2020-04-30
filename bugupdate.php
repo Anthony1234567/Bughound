@@ -1,8 +1,8 @@
 <?php   
 $link=mysqli_connect("localhost","root","");
 mysqli_select_db($link,"bughound");
+$connect=mysqli_connect('localhost','root','','bughound');
 ?>
-
 <?php   
        
         if(isset($_POST['btn'])){
@@ -29,13 +29,6 @@ mysqli_select_db($link,"bughound");
          }
     }
 ?>
-
-
-
-
-
-
-
 <?php
 if(isset($_POST['cancel'])){
     header("Location:welcome.php");
@@ -43,64 +36,75 @@ if(isset($_POST['cancel'])){
 if(isset($_POST['B4'])){
 
     if(isset($_POST['programs'])){
-        $programs=$_POST['programs'];
+        $programs=mysqli_real_escape_string($connect,$_POST['programs']);
     }
     if(isset($_POST['reportType'])){
-        $reportType=$_POST['reportType'];
+        $reportType=mysqli_real_escape_string($connect,$_POST['reportType']);
     }
     if(isset($_POST['severity']))
     {
-      $severity=$_POST['severity'];
+      $severity=mysqli_real_escape_string($connect,$_POST['severity']);
     }
     if(isset($_POST['problem_summary'])){
-        $problem_summary=$_POST['problem_summary'];
+        $problem_summary=mysqli_real_escape_string($connect,$_POST['problem_summary']);
     }
     if(isset($_POST['problem'])){
-        $problem=$_POST['problem'];
+        $problem=mysqli_real_escape_string($connect,$_POST['problem']);
     }
     if(isset($_POST['suggestedFix'])){
-        $suggestedFix=$_POST['suggestedFix'];
+        $suggestedFix=mysqli_real_escape_string($connect,$_POST['suggestedFix']);
     }
     if(isset($_POST['reportedBy'])){
-        $reportedBy=$_POST['reportedBy'];
+        $reportedBy=mysqli_real_escape_string($connect,$_POST['reportedBy']);
     }
     if(isset($_POST['reportedDate'])){
-        $reportedDate=$_POST['reportedDate'];
+        $reportedDate=mysqli_real_escape_string($connect,$_POST['reportedDate']);
     }
     if(isset($_POST['functionalAreas'])){
-        $functionalAreas=$_POST['functionalAreas'];
+        $functionalAreas=mysqli_real_escape_string($connect,$_POST['functionalAreas']);
     }
     if(isset($_POST['assignedTo'])){
-        $assignedTo=$_POST['assignedTo'];
+        $assignedTo=mysqli_real_escape_string($connect,$_POST['assignedTo']);
     }
     if(isset($_POST['status'])){
-        $status=$_POST['status'];
+        $status=mysqli_real_escape_string($connect,$_POST['status']);
     }
     if(isset($_POST['priority'])){
-        $priority=$_POST['priority'];
+        $priority=mysqli_real_escape_string($connect,$_POST['priority']);
     }
     if(isset($_POST['resolution'])){
-        $resolution=$_POST['resolution'];
+        $resolution=mysqli_real_escape_string($connect,$_POST['resolution']);
     }
     if(isset($_POST['resolutionVersion'])){
-        $resolutionVersion=$_POST['resolutionVersion'];
+        $resolutionVersion=mysqli_real_escape_string($connect,$_POST['resolutionVersion']);
     }
     if(isset($_POST['resolvedBy'])){
-        $resolvedBy=$_POST['resolvedBy'];
+        $resolvedBy=mysqli_real_escape_string($connect,$_POST['resolvedBy']);
     }
     if(isset($_POST['resolvedDate'])){
-        $resolvedDate=$_POST['resolvedDate'];
+        $resolvedDate=mysqli_real_escape_string($connect,$_POST['resolvedDate']);
     }
     if(isset($_POST['testedBy'])){
-        $testedBy=$_POST['testedBy'];
+        $testedBy=mysqli_real_escape_string($connect,$_POST['testedBy']);
     }
     if(isset($_POST['testedDate'])){
-        $testedDate=$_POST['testedDate'];
+        $testedDate=mysqli_real_escape_string($connect,$_POST['testedDate']);
     }
     if(isset($_POST['comments'])){
-        $comments=$_POST['comments'];
+        $comments=mysqli_real_escape_string($connect,$_POST['comments']);
     }
-
+    if(isset($_POST['reproducible'])){
+        $reproducible=mysqli_real_escape_string($connect,$_POST['reproducible']);
+    }
+    if(isset($_POST['deferred'])){
+        $deferred=mysqli_real_escape_string($connect,$_POST['deferred']);
+    }
+    $programs=!empty($programs)? "'$programs'":"NULL";
+    $reportedBy=!empty($reportedBy)? "'$reportedBy'":"NULL";
+    $functionalAreas=!empty($functionalAreas)? "'$functionalAreas'":"NULL";
+    $assignedTo=!empty($assignedTo)? "'$assignedTo'":"NULL";
+    $resolvedBy=!empty($resolvedBy)? "'$resolvedBy'":"NULL";
+    $testedBy=!empty($testedBy)? "'$testedBy'":"NULL";
 
     $connect=mysqli_connect('localhost','root',"",'bughound');
  
@@ -109,7 +113,28 @@ if(isset($_POST['B4'])){
         echo 'Failed to connect';
     }
     $bug=$_GET['data'];
-    $query="UPDATE `bug` SET `Program`='$programs',`Report_type`='$reportType',`Severity`='$severity',`Functional_area`='$functionalAreas',`Assigned_to`='$assignedTo',`Status`='$status',`Priority`='$priority',`Resolution`='$resolution',`Reported_by`='$reportedBy',`Tested_by`='$testedBy',`Problem_summary`='$problem_summary',`Suggested_fix`='$suggestedFix',`Resolution_version`='$resolutionVersion',`Problem`='$problem',`Comments`='$comments' WHERE `BugID`='$bug'";
+    $query="UPDATE `bug` SET 
+    `Program`=$programs,
+    `Report_type`='$reportType',
+    `Severity`='$severity',
+    `Functional_area`=$functionalAreas,
+    `Assigned_to`=$assignedTo,
+    `Status`='$status',
+    `Priority`='$priority',
+    `Resolution`='$resolution',
+    `Reported_by`=$reportedBy,
+    `Report_date`='$reportedDate',
+    `Resolved_by`=$resolvedBy,
+    `Tested_by`=$testedBy,
+    `Resolved_date`='$resolvedDate',
+    `Tested_date`='$testedDate',
+    `Problem_summary`='$problem_summary',
+    `Suggested_fix`='$suggestedFix',
+    `Resolution_version`='$resolutionVersion',
+    `Problem`='$problem',
+    `Comments`='$comments',
+    `Reproducible`='$reproducible',
+    `Treat as deferred?`='$deferred' WHERE `BugID`='$bug'";
     if(mysqli_query($connect,$query)){
         
         echo '<script language="javascript">';
@@ -140,6 +165,7 @@ if($n>0){
     while($ro=mysqli_fetch_row($r)) {
         $prog=$ro[1];
         $area=$ro[4];
+       
         $rtype=$ro[2];
         $sev=$ro[3];
         $assTo=$ro[5];
@@ -150,22 +176,20 @@ if($n>0){
         $testby=$ro[12];
         $resolveby=$ro[11];
         $resver=$ro[17];
+      
         $reportdate=$ro[10];
-        $prob_summary=$ro[15];
-        $prob=$ro[18];
-        $comm=$ro[19];
-        $suggest_fix=$ro[16];
+        $prob_summary=mysqli_real_escape_string($conn,$ro[15]);
+        $prob=mysqli_real_escape_string($conn,$ro[18]);
+        $comm=mysqli_real_escape_string($conn,$ro[19]);
+        $suggest_fix=mysqli_real_escape_string($conn,$ro[16]);
         $reportd=$ro[10];
         $testd=$ro[14];
         $resold=$ro[13];
+        $repoduce=$ro[20];
+        $treat=$ro[21];
     }
 }
 ?>
-
-
-
-
-
 <html>
 <head>
 <title>Bug Update Page </title>
@@ -181,6 +205,13 @@ if($n>0){
 </style>
 <script src="jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
+function fun(){
+    var element=document.getElementById('displayAttach').value;
+    var url="view.php?id="+element;
+    window.location.href=url;
+}
+</script>
+<script type="text/javascript">
 $(document).ready(function(){
     $('#programs').on('change',function(){
         var program_id=$(this).val();
@@ -191,20 +222,40 @@ $(document).ready(function(){
                 data:'programId='+program_id,
                 dataType:'text',
                 success:function(html){
-                $('#functionalAreas').html(html);
-                
+                     $('#functionalAreas').html(html);
+                               
                 }
          });
         }
         else{
-            $('#functionalAreas').html('<option value="">Select program first</option>');
+            $('#functionalAreas').html('<option value="">Select program first</option>');    
+        }
+    }); 
+});
+$(document).ready(function(){
+    $('#programs').on('change',function(){
+        var program_id=$(this).val();
+        if(program_id){
+                $.ajax({
+                                url:'fetch_program_versions.php',
+                                type:'POST',
+                                data:'programId='+program_id,
+                                
+                                dataType:'text',
+                                success:function(html){
+                                $('#resolutionVersion').html(html);
+                                
+                                }
+                        });
+        }
+        else{
+            $('#resolutionVersion').html('<option value="">Select program first</option>');
+           
         }
     });
-    
 });
 </script>
 <script type="text/javascript">
-
     var rtype="<?php echo $rtype ?>";
     var sev="<?php echo $sev ?>";
     var assTo="<?php echo $assTo ?>";
@@ -216,8 +267,7 @@ $(document).ready(function(){
     var resolveby="<?php echo $resolveby ?>";
     var resver="<?php echo $resver ?>";
     var prog="<?php echo $prog ?>";
-var area="<?php echo $area ?>";
-
+    var area="<?php echo $area ?>";
     var prob_summary="<?php echo $prob_summary ?>";
     var comm="<?php echo $comm ?>";
     var suggest_fix="<?php echo $suggest_fix ?>";
@@ -225,9 +275,13 @@ var area="<?php echo $area ?>";
     var reportd="<?php echo $reportd ?>";
     var resold="<?php echo $resold ?>";
     var testd="<?php echo $testd ?>";
+    var repoduce="<?php echo $repoduce ?>";
+    var treat="<?php echo $treat ?>";
     $(document).ready(function(){
     $('select[name="programs"]').first().val(prog);
-    $('select[name="functionalAreas"]').first().val(area);
+   // $('#functionalAreas option[value='area']').attr('selected','selected');
+  
+    $('#functionalAreas').first().val(area);
     $('select[name="reportType"]').first().val(rtype);
     $('select[name="severity"]').first().val(sev);
     $('select[name="assignedTo"]').first().val(assTo);
@@ -237,7 +291,11 @@ var area="<?php echo $area ?>";
     $('select[name="reportedBy"]').first().val(reportby);
     $('select[name="testedBy"]').first().val(testby);
     $('select[name="resolvedBy"]').first().val(resolveby);
-    $('select[name="resolutionVersion"]').first().val(resver);
+    //$('#resolutionVersion option[value='resver']').attr('selected','selected');
+     $('#resolutionVersion').first().val(resver);
+    
+    $('select[name="reproducible"]').first().val(repoduce);
+    $('select[name="deferred"]').first().val(treat);
     $('#problem_summary').val(prob_summary);
     $('#problem').val(prob);
     $('#suggestedFix').val(suggest_fix);
@@ -245,8 +303,6 @@ var area="<?php echo $area ?>";
     $('#dateReported').val(reportd);
     $('#dateTested').val(testd);
     $('#dateResolved').val(resold);
-
-
 });
 </script>
 </head>
@@ -305,7 +361,8 @@ var area="<?php echo $area ?>";
             <tr>
                 <td align="left" valign="top" width="35%">Problem Summary</td>
  
-                <td width="57%"><textarea rows="4" maxlen="200" name="problem_summary" cols="50" id="problem_summary" required></textarea><input type="checkbox" id="check">Reproducible</td>
+                <td width="57%"><textarea rows="4" maxlen="200" name="problem_summary" cols="50" id="problem_summary" required></textarea></td>
+                <td><label>Reproducible?</label><select name="reproducible"><option value="">Select</option><option value="YES">YES</option><option value="NO">NO</option></td>
              </tr >
              <tr>
                 <td align="left" valign="top" width="35%">Problem</td>
@@ -313,7 +370,7 @@ var area="<?php echo $area ?>";
                 <td width="57%"><textarea rows="4" maxlen="200" name="problem" cols="50" id="problem" required></textarea></td>
             </tr >
             <tr>
-                <td align="left" valign="top" width="35%">Suggested Fix</td>
+                <td align="left" valign="top" width="35%">Suggested Fix(Optional)</td>
  
                 <td width="57%"><textarea rows="4" maxlen="200" name="suggestedFix" id="suggestedFix" cols="50"></textarea></td>
             </tr >
@@ -357,7 +414,7 @@ var area="<?php echo $area ?>";
  
                 <td width="57%">
                 
-                <select name="assignedTo" required>
+                <select name="assignedTo" >
                         <option value="">Select User</option>
                         <?php 
                             $result=mysqli_query($link,"select * from employee");
@@ -376,11 +433,11 @@ var area="<?php echo $area ?>";
             <tr>
                 <td align="left" valign="top" width="41%">Comments</td>
  
-                <td width="57%"><textarea rows="4" maxlen="200" name="comments" id="comments" cols="20" required></textarea></td>
+                <td width="57%"><textarea rows="4" maxlen="200" name="comments" id="comments" cols="20" ></textarea></td>
             </tr >
             <tr>
                 <td align="left" valign="top" width="41%">Status</td>
-                <td width="57%"><select name="status" required>
+                <td width="57%"><select name="status" >
                     <option value="">Select Status</option>
                     <option value="Open">Open</option>
                     <option value="Closed">Closed</option>
@@ -388,7 +445,7 @@ var area="<?php echo $area ?>";
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%">Priority</td>
-                <td width="57%"><select name="priority" required>
+                <td width="57%"><select name="priority">
                 <option value="">Select Priority</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -399,33 +456,23 @@ var area="<?php echo $area ?>";
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%">Resolution</td>
-                <td width="57%"><select name="resolution" required>
+                <td width="57%"><select name="resolution" >
                 <option value="">Select Resolution</option>
                     <option value="Pending">Pending</option>
                     <option value="Fixed">Fixed</option>
                     <option value="Irreproducible">Irreproducible</option>
-                    <option value="Deferred">Deferred</option> \
+                    <option value="Deferred">Deferred</option> 
                     <option value="As assigned">As assigned</option>
                     <option value="Cant fix">Can't fix</option>
-                    <option value="Withdrawn by Reporter">Withdrawn by Reporter</option> \
+                    <option value="Withdrawn by Reporter">Withdrawn by Reporter</option> 
                     <option value="Need more Info">Need more Info</option>
                     <option value="Disagree with suggestion">Disagree with suggestion</option>
                     </select></td>
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%">Resolution Version</td>
-                <td width="57%"><select name="resolutionVersion" required>
+                <td width="57%"><select name="resolutionVersion" id="resolutionVersion" >
                     <option value="">Select Resolution Version</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
                     </select></td>
             </tr>
             <tr>
@@ -433,7 +480,7 @@ var area="<?php echo $area ?>";
  
                 <td width="57%">
                 
-                <select name="resolvedBy" required>
+                <select name="resolvedBy" >
                         <option value="">Select User</option>
                         <?php 
                             $result=mysqli_query($link,"select * from employee");
@@ -450,14 +497,14 @@ var area="<?php echo $area ?>";
                 </td>
                 <td align="left" valign="top" width="41%">Date</td>
  
-                <td width="57%"><input type="date" id="dateResolved" name="resolvedDate" required></td>
+                <td width="57%"><input type="date" id="dateResolved" name="resolvedDate" ></td>
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%" >Tested By</td>
  
                 <td width="57%">
                 
-                <select name="testedBy" required>
+                <select name="testedBy">
                         <option value="">Select User</option>
                         <?php 
                             $result=mysqli_query($link,"select * from employee");
@@ -474,10 +521,10 @@ var area="<?php echo $area ?>";
                 </td>
                 <td align="left" valign="top" width="41%">Date</td>
  
-                <td width="57%"><input type="date" id="dateTested" name="testedDate" required></td>
+                <td width="57%"><input type="date" id="dateTested" name="testedDate" ></td>
             </tr>
                 <tr>
-                    <td><input type="checkbox" id="check" name="Treat as deferred"><label for="check"> Treat as Deferred</label>
+                    <td><label for="check"> Treat as Deferred ? </label><select name="deferred"><option value="">Select</option><option value="YES">YES</option><option value="NO">NO</option></select>
                     </td>
             </tr>
             <tr>
@@ -490,10 +537,37 @@ var area="<?php echo $area ?>";
             
         </table>
     </form>
+    <div align="center">
+        <label for="displayAttach">Open Attachments:</label>
+        <select id="displayAttach" >
+        <option value="">None</option>
+        <?php 
+         $conn=new mysqli("localhost","root","","bughound");
+         if($conn->connect_error)
+         { 
+          die("connection failed:" . $conn->connect_error);
+         }
+            $i=$_GET['data'];
+            $query3="SELECT * from attachment where `Bugid`=$i";
+            $attachment_result=$conn->query($query3);
+            $output="";
+            while($arows=mysqli_fetch_row($attachment_result)){
+                $output.='<option value="'.$arows[0].'">'.$arows[1].'</option>';
+            }
+            $output.='</select>';
+            echo $output;
+            
+        ?>
+        <button name="viewAttachments" onclick="fun();">Open</button>
+        <br>
+        <br>
+    </div>
+    
     <form method="post" enctype="multipart/form-data">
+            
         <div align="center">
-        <label>Attachments:</label>
-        <input type="file" name="myfile"/>
+        <label for="myfile">Attachments:</label>
+        <input type="file" id="myfile" name="myfile"/>
         <button name="btn">Upload</button>
         <br>
         <br>

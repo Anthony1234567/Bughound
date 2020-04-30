@@ -1,69 +1,82 @@
 <?php   
 $link=mysqli_connect("localhost","root","");
 mysqli_select_db($link,"bughound");
+$connect=mysqli_connect('localhost','root','','bughound');
 ?>
-
 <?php
+$programs=$reportType=$severity=$problem_summary=$problem=$suggestedFix=$reportedBy=$reportedBy=$reportedDate=$functionalAreas=$assignedTo=$status=$priority=$resolution=$resolutionVersion=$resolvedBy=$resolvedDate=$testedBy=$testedDate=$comments=$reproducible=$deferred='';
 if(isset($_POST['B4'])){
 
     if(isset($_POST['programs'])){
-        $programs=$_POST['programs'];
+        $programs=mysqli_real_escape_string($connect,$_POST['programs']);
     }
     if(isset($_POST['reportType'])){
-        $reportType=$_POST['reportType'];
+        $reportType=mysqli_real_escape_string($connect,$_POST['reportType']);
     }
     if(isset($_POST['severity']))
     {
-      $severity=$_POST['severity'];
+      $severity=mysqli_real_escape_string($connect,$_POST['severity']);
     }
     if(isset($_POST['problem_summary'])){
-        $problem_summary=$_POST['problem_summary'];
+        $problem_summary=mysqli_real_escape_string($connect,$_POST['problem_summary']);
     }
     if(isset($_POST['problem'])){
-        $problem=$_POST['problem'];
+        $problem=mysqli_real_escape_string($connect,$_POST['problem']);
     }
     if(isset($_POST['suggestedFix'])){
-        $suggestedFix=$_POST['suggestedFix'];
+        $suggestedFix=mysqli_real_escape_string($connect,$_POST['suggestedFix']);
     }
     if(isset($_POST['reportedBy'])){
-        $reportedBy=$_POST['reportedBy'];
+        $reportedBy=mysqli_real_escape_string($connect,$_POST['reportedBy']);
     }
     if(isset($_POST['reportedDate'])){
-        $reportedDate=$_POST['reportedDate'];
+        $reportedDate=mysqli_real_escape_string($connect,$_POST['reportedDate']);
     }
     if(isset($_POST['functionalAreas'])){
-        $functionalAreas=$_POST['functionalAreas'];
+        $functionalAreas=mysqli_real_escape_string($connect,$_POST['functionalAreas']);
     }
     if(isset($_POST['assignedTo'])){
-        $assignedTo=$_POST['assignedTo'];
+        $assignedTo=mysqli_real_escape_string($connect,$_POST['assignedTo']);
     }
     if(isset($_POST['status'])){
-        $status=$_POST['status'];
+        $status=mysqli_real_escape_string($connect,$_POST['status']);
     }
     if(isset($_POST['priority'])){
-        $priority=$_POST['priority'];
+        $priority=mysqli_real_escape_string($connect,$_POST['priority']);
     }
     if(isset($_POST['resolution'])){
-        $resolution=$_POST['resolution'];
+        $resolution=mysqli_real_escape_string($connect,$_POST['resolution']);
     }
     if(isset($_POST['resolutionVersion'])){
-        $resolutionVersion=$_POST['resolutionVersion'];
+        $resolutionVersion=mysqli_real_escape_string($connect,$_POST['resolutionVersion']);
     }
     if(isset($_POST['resolvedBy'])){
-        $resolvedBy=$_POST['resolvedBy'];
+        $resolvedBy=mysqli_real_escape_string($connect,$_POST['resolvedBy']);
     }
     if(isset($_POST['resolvedDate'])){
-        $resolvedDate=$_POST['resolvedDate'];
+        $resolvedDate=mysqli_real_escape_string($connect,$_POST['resolvedDate']);
     }
     if(isset($_POST['testedBy'])){
-        $testedBy=$_POST['testedBy'];
+        $testedBy=mysqli_real_escape_string($connect,$_POST['testedBy']);
     }
     if(isset($_POST['testedDate'])){
-        $testedDate=$_POST['testedDate'];
+        $testedDate=mysqli_real_escape_string($connect,$_POST['testedDate']);
     }
     if(isset($_POST['comments'])){
-        $comments=$_POST['comments'];
+        $comments=mysqli_real_escape_string($connect,$_POST['comments']);
     }
+    if(isset($_POST['reproducible'])){
+        $reproducible=mysqli_real_escape_string($connect,$_POST['reproducible']);
+    }
+    if(isset($_POST['deferred'])){
+        $deferred=mysqli_real_escape_string($connect,$_POST['deferred']);
+    }
+    $programs=!empty($programs)? "'$programs'":"NULL";
+    $reportedBy=!empty($reportedBy)? "'$reportedBy'":"NULL";
+    $functionalAreas=!empty($functionalAreas)? "'$functionalAreas'":"NULL";
+    $assignedTo=!empty($assignedTo)? "'$assignedTo'":"NULL";
+    $resolvedBy=!empty($resolvedBy)? "'$resolvedBy'":"NULL";
+    $testedBy=!empty($testedBy)? "'$testedBy'":"NULL";
 
 
     $connect=mysqli_connect('localhost','root','','bughound');
@@ -90,26 +103,27 @@ if(isset($_POST['B4'])){
     `Suggested_fix`,
     `Resolution_version`,
     `Problem`,
-    `Comments`) VALUES ('$programs',
+    `Comments`,
+    `Reproducible`,`Treat as deferred?`) VALUES ($programs,
     '$reportType',
     '$severity',
-    '$functionalAreas',
-    '$assignedTo',
+    $functionalAreas,
+    $assignedTo,
     '$status',
     '$priority',
     '$resolution',
-    '$reportedBy',
+    $reportedBy,
     '$reportedDate',
-    '$resolvedBy',
-    '$testedBy',
+    $resolvedBy,
+    $testedBy,
     '$resolvedDate',
     '$testedDate',
     '$problem_summary',
     '$suggestedFix',
     '$resolutionVersion',
     '$problem',
-    '$comments')"; 
-    
+    '$comments','$reproducible','$deferred')"; 
+   
     if(mysqli_query($connect,$query)){
         
         echo '<script language="javascript">';
@@ -122,11 +136,6 @@ if(isset($_POST['B4'])){
 
 }
 ?>
-
-
-
-
-
 
 <html>
 <head>
@@ -189,7 +198,8 @@ if(isset($_POST['B4'])){
             <tr>
                 <td align="left" valign="top" width="35%">Problem Summary</td>
  
-                <td width="57%"><textarea rows="4" maxlen="200" name="problem_summary" cols="50" id="check" required></textarea><input type="checkbox" id="check">Reproducible</td>
+                <td width="57%"><textarea rows="4" maxlen="200" name="problem_summary" cols="50" id="check" required></textarea></td>
+                <td width="57%"><label>Reproducible?</label><select name="reproducible" required><option value="">Select</option><option value="YES">YES</option><option value="NO">NO</option></td>
              </tr >
              <tr>
                 <td align="left" valign="top" width="35%">Problem</td>
@@ -197,9 +207,9 @@ if(isset($_POST['B4'])){
                 <td width="57%"><textarea rows="4" maxlen="200" name="problem" cols="50" required></textarea></td>
             </tr >
             <tr>
-                <td align="left" valign="top" width="35%">Suggested Fix</td>
+                <td align="left" valign="top" width="35%">Suggested Fix(Optional)</td>
  
-                <td width="57%"><textarea rows="4" maxlen="200" name="suggestedFix" cols="50" required></textarea></td>
+                <td width="57%"><textarea rows="4" maxlen="200" name="suggestedFix" cols="50"></textarea></td>
             </tr >
             <tr>
                 <td align="left" valign="top" width="35%">Reported By</td>
@@ -241,7 +251,7 @@ if(isset($_POST['B4'])){
  
                 <td width="57%">
                 
-                <select name="assignedTo" required>
+                <select name="assignedTo" >
                         <option value="">Select User</option>
                         <?php 
                             $result=mysqli_query($link,"select * from employee");
@@ -260,11 +270,11 @@ if(isset($_POST['B4'])){
             <tr>
                 <td align="left" valign="top" width="41%">Comments</td>
  
-                <td width="57%"><textarea rows="4" maxlen="200" name="comments" cols="20" required></textarea></td>
+                <td width="57%"><textarea rows="4" maxlen="200" name="comments" cols="20"></textarea></td>
             </tr >
             <tr>
                 <td align="left" valign="top" width="41%">Status</td>
-                <td width="57%"><select name="status" required>
+                <td width="57%"><select name="status">
                     <option value="">Select Status</option>
                     <option value="Open">Open</option>
                     <option value="Closed">Closed</option>
@@ -272,7 +282,7 @@ if(isset($_POST['B4'])){
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%">Priority</td>
-                <td width="57%"><select name="priority" required>
+                <td width="57%"><select name="priority">
                 <option value="">Select Priority</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -283,7 +293,7 @@ if(isset($_POST['B4'])){
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%">Resolution</td>
-                <td width="57%"><select name="resolution" required>
+                <td width="57%"><select name="resolution" >
                 <option value="">Select Resolution</option>
                     <option value="Pending">Pending</option>
                     <option value="Fixed">Fixed</option>
@@ -298,18 +308,8 @@ if(isset($_POST['B4'])){
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%">Resolution Version</td>
-                <td width="57%"><select name="resolutionVersion" required>
+                <td width="57%"><select name="resolutionVersion" id="resolutionVersion" >
                     <option value="">Select Resolution Version</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
                     </select></td>
             </tr>
             <tr>
@@ -317,7 +317,7 @@ if(isset($_POST['B4'])){
  
                 <td width="57%">
                 
-                <select name="resolvedBy" required>
+                <select name="resolvedBy">
                         <option value="">Select User</option>
                         <?php 
                             $result=mysqli_query($link,"select * from employee");
@@ -334,14 +334,14 @@ if(isset($_POST['B4'])){
                 </td>
                 <td align="left" valign="top" width="41%">Date</td>
  
-                <td width="57%"><input type="date" id="dateResolved" name="resolvedDate" required></td>
+                <td width="57%"><input type="date" id="dateResolved" name="resolvedDate" ></td>
             </tr>
             <tr>
                 <td align="left" valign="top" width="41%" >Tested By</td>
  
                 <td width="57%">
                 
-                <select name="testedBy" required>
+                <select name="testedBy">
                         <option value="">Select User</option>
                         <?php 
                             $result=mysqli_query($link,"select * from employee");
@@ -358,10 +358,10 @@ if(isset($_POST['B4'])){
                 </td>
                 <td align="left" valign="top" width="41%">Date</td>
  
-                <td width="57%"><input type="date" id="dateTested" name="testedDate" required></td>
+                <td width="57%"><input type="date" id="dateTested" name="testedDate" ></td>
             </tr>
                 <tr>
-                    <td><input type="checkbox" id="check" name="Treat as deferred"><label for="check"> Treat as Deferred</label>
+                    <td><label for="check"> Treat as Deferred ? </label><select name="deferred" ><option value="">Select</option><option value="YES">YES</option><option value="NO">NO</option></select>
                     </td>
             </tr>
             <tr>
@@ -370,7 +370,7 @@ if(isset($_POST['B4'])){
                         <input type="submit" value="  Submit" name="B4">
                         <input type="reset" value="  Reset All   " name="reset"></td>
             </tr>
- 
+   
         </table>
     </form>
     <div align="center">
@@ -394,13 +394,44 @@ $(document).ready(function(){
                 data:'programId='+program_id,
                 dataType:'text',
                 success:function(html){
-                $('#functionalAreas').html(html);
-                
+                     $('#functionalAreas').html(html);
+                               
                 }
          });
+                        
+        
         }
         else{
             $('#functionalAreas').html('<option value="">Select program first</option>');
+           
+        }
+    });
+    
+});
+
+
+
+$(document).ready(function(){
+    $('#programs').on('change',function(){
+        var program_id=$(this).val();
+        if(program_id){
+                $.ajax({
+                                url:'fetch_program_versions.php',
+                                type:'POST',
+                                data:'programId='+program_id,
+                                
+                                dataType:'text',
+                                success:function(html){
+                                $('#resolutionVersion').html(html);
+                                
+                                }
+                        });
+                        
+        
+        }
+        else{
+            $('#resolutionVersion').html('<option value="">Select program first</option>');
+           
         }
     });
     

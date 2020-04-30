@@ -26,9 +26,11 @@ if(isset($_GET["data"]))
             </tr>
 </table>
 </form>
+<div align="center">
+<button onclick="location.href='simpleDropdown.php'">Back</button>
+<button onclick="location.href='dbmaintainence.php'">Cancel</button>
+</div>
 <?php
-
-
 if(isset($_POST['B4'])){
 
 $name = (isset($_POST['name']) ? $_POST['name'] : '');
