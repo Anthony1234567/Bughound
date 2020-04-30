@@ -9,7 +9,7 @@
         </select>
             <input type="submit" name="export" value="CSV Export" />
         </form>
-        <form method="post" action="xmlExport.php">
+        <form method="post" action="xml.php">
         <select name="table">
         <option value="employee">Employee</option>
         <option value="area">Areas</option>
